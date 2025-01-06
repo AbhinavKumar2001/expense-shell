@@ -29,6 +29,7 @@ CHECK_ROOT(){
     fi
 }
 
+mkdir -p $LOGS_FOLDER #for storing the logs file(expense-logs) in logs folder#
 echo "Script started executing at: $TIMESTAMP" &>>$LOG_FILE_NAME
 
 CHECK_ROOT
@@ -43,16 +44,18 @@ systemctl start nginx &>>$LOG_FILE_NAME
 VALIDATE $? "Starting nginx"
 
 rm -rf /usr/share/nginx/html/* 
+VALIDATE $? "Removing existing version of the code"
 
 curl -o /tmp/frontend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-frontend-v2.zip &>>$LOG_FILE_NAME
-VALIDATE $? "Downloading frontend"
+VALIDATE $? "Downloading latest code"
 
 cd /usr/share/nginx/html 
+VALIDATE $? "Moving to HTML Directory"
 
 unzip /tmp/frontend.zip &>>$LOG_FILE_NAME
-VALIDATE $? "Unzip frontend"
+VALIDATE $? "Unzipping the frontend code"
 
 cp /home/ec2-user/expense-shell/expense.conf /etc/nginx/default.d/expense.conf
 
 systemctl restart nginx &>>$LOG_FILE_NAME
-VALIDATE $? "Restart frontend"
+VALIDATE $? "Restarting nginx"

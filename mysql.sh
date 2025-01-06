@@ -40,7 +40,7 @@ systemctl enable mysqld &>>$LOG_FILE_NAME
 VALIDATE $? "Enabling MySQL Server"
 
 systemctl start mysqld &>>$LOG_FILE_NAME
-VALIDATE $? "Starting MySQL Server"
+VALIDATE $? "Starting MySQL Server" 
 
 mysql -h mysql.akdaws82s.store -u root -pExpenseApp@1 -e 'show databases;' &>>$LOG_FILE_NAME
 
